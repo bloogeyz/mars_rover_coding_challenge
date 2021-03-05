@@ -73,13 +73,13 @@ class Plateau:
     def __init__(self, max_x: int, max_y: int):
         self.max_x = max_x
         self.max_y = max_y
-        # TODO: The grid attribute isn't used but I've set them up in case we ever wanted to check that rovers
-        # aren't on top of each other
+        # TODO: The grid attribute isn't used but I've set them up in case we ever wanted to check that a rover
+        # doesn't cross over another rover
         inner_grid = {y: None for y in range(0, max_y)}
         self.grid = {x: inner_grid for x in range(0, max_x)}
 
     def valid_position(self, x: int, y: int) -> bool:
-        return x <= self.max_x and y <= self.max_y
+        return 0 <= x <= self.max_x and 0 <= y <= self.max_y
 
 
 @dataclass
@@ -98,7 +98,7 @@ class Rover(Position):
         for instruction in instructions:
             self.do_instruction(Instruction[instruction.upper()])
             if not mars_map.valid_position(self.x, self.y):
-                raise ValueError(f"Rover {self.id} has gone off the map: x: {self.x} y: {self.y}")
+                raise ValueError(f"Rover {self.id} has gone off the map: x: {self.x}, y: {self.y}")
 
     def do_instruction(self, instruction: Instruction):
         if instruction is Instruction.L or instruction is Instruction.R:

@@ -26,12 +26,14 @@ def build_rover(rover_position_as_string: str, rover_id: int) -> Result[Rover, s
     return Ok(Rover(rover_id=rover_id, position_x=position_x, position_y=position_y, facing=direction))
 
 
-def read_input(input: str) -> Result[InputResult, str]:
+def read_input(rover_input: str) -> Result[InputResult, str]:
     rover_list = []
     instructions = {}
-    split_input = input.splitlines()
-    assert len(split_input) > 2, f"Input in incorrect format, expected at least 3 lines got {len(split_input)}"
-    assert len(split_input) % 2 != 0, f"Invalid input: {input}, an odd number of lines in expected"
+    split_input = rover_input.strip().splitlines()
+    if len(split_input) < 2:
+        return Err(f"Input in incorrect format, expected at least 3 lines got {len(split_input)}")
+    if len(split_input) % 2 == 0:
+        return Err(f"Invalid input: expected an odd number of lines, got {len(split_input)}")
     map_result = build_map(split_input[0].strip())
     if map_result.is_err():
         return Err(map_result.unwrap_err())
@@ -49,14 +51,18 @@ def read_input(input: str) -> Result[InputResult, str]:
     return Ok(InputResult(map_result.unwrap(), rover_list, instructions))
 
 
-def complete_route(input) -> Result[List[str], str]:
-    input_result = read_input(input)
+def process_rover_routes(rover_input) -> Result[List[str], str]:
+    # TODO: Expand this to take other formats, namely from a text file and dictionary input
+    input_result = read_input(rover_input)
     if input_result.is_err():
         return Err(input_result.unwrap_err())
     mars_rover_data = input_result.unwrap()
 
     final_positions = []
     for rover in mars_rover_data.rovers:
-        rover.read_instructions(mars_rover_data.map, mars_rover_data.instructions[rover.id])
+        try:
+            rover.read_instructions(mars_rover_data.map, mars_rover_data.instructions[rover.id])
+        except ValueError as e:
+            return Err(str(e))
         final_positions.append(str(rover))
     return Ok(final_positions)

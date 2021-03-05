@@ -8,9 +8,9 @@ result = "*"
 
 [dev-packages]
 pytest = "*"
-black = "*"
 flake8 = "*"
 mypy = "*"
+hypothesis = "*"
 
 [requires]
 python_version = "3.9"
