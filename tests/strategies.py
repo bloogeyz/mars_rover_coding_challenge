@@ -13,6 +13,7 @@ anticlockwise_pos_map = {v: k for k, v in clockwise_pos_map.items()}
 
 
 def apply_instruction(current_pos, next_instruction) -> Tuple[int, int, str]:
+    # TODO: With more time I would've made this use the same code as in the main application
     if next_instruction == "L":
         return current_pos[0], current_pos[1], anticlockwise_pos_map[current_pos[2]]
     elif next_instruction == "R":

@@ -1,5 +1,5 @@
 import re
-from typing import List
+from typing import List, Dict
 
 from result import Result, Err, Ok
 from data_types import map_pattern, Plateau, rover_position_pattern, rover_movement_pattern, Rover, InputResult
@@ -27,8 +27,8 @@ def build_rover(rover_position_as_string: str, rover_id: int) -> Result[Rover, s
 
 
 def read_input(rover_input: str) -> Result[InputResult, str]:
-    rover_list = []
-    instructions = {}
+    rover_list: List[Rover] = []
+    instructions: Dict[int, str] = {}
     split_input = rover_input.strip().splitlines()
     if len(split_input) < 2:
         return Err(f"Input in incorrect format, expected at least 3 lines got {len(split_input)}")
@@ -58,7 +58,7 @@ def process_rover_routes(rover_input) -> Result[List[str], str]:
         return Err(input_result.unwrap_err())
     mars_rover_data = input_result.unwrap()
 
-    final_positions = []
+    final_positions: List[str] = []
     for rover in mars_rover_data.rovers:
         try:
             rover.read_instructions(mars_rover_data.map, mars_rover_data.instructions[rover.id])
