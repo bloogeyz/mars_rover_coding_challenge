@@ -25,12 +25,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install pipenv
         pipenv install --dev
+        pipenv shell
         pip install black
     - name: Lint
       run: |
         # stop the build if there are Python syntax errors or undefined names
         black -l 120 --check .
-        flake8 .
         flake8 .
         mypy .
     - name: Test with pytest
