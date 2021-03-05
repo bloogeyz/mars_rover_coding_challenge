@@ -23,15 +23,17 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install black flake8 mypy pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install pipenv
+        pipenv install --dev
+        pip install black
     - name: Lint
       run: |
         # stop the build if there are Python syntax errors or undefined names
         black -l 120 --check .
-        flake8 .
-        flake8 .
-        mypy .
+        pipenv run flake8 .
+        pipenv run mypy .
     - name: Test with pytest
       run: |
-        pytest
+        pipenv run pytest
+      env:
+        PYTHONPATH: .
