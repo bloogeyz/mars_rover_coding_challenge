@@ -2,9 +2,9 @@ import pytest
 
 from hypothesis import given
 
-from rover_logic import process_rover_routes, read_input
-from conftest import invalid_inputs, invalid_rover_paths
-from strategies import random_input_generation
+from rover_logic import process_rover_routes
+from tests.conftest import invalid_rover_paths
+from tests.strategies import random_input_generation
 
 
 def test_complete_route_standard_input():
@@ -21,17 +21,9 @@ def test_complete_route_standard_input():
 
 @given(random_input_generation())
 def test_complete_route_hypothesis(random_input):
-    """This test relies on the hypothesis library to test a variety of random inputs within bounds"""
+    """This test relies on the hypothesis library to test a variety of random interpreter within bounds"""
     completed_route_result = process_rover_routes(random_input)
     assert completed_route_result.is_ok()
-
-
-# TODO: Hypothesis could also be used to create invalid scenarios in the other two tests
-@pytest.mark.parametrize("invalid_input, expected_response", invalid_inputs)
-def test_read_input_returns_correct_error_with_invalid_input(invalid_input, expected_response):
-    result = read_input(invalid_input)
-    assert result.is_err()
-    assert result.unwrap_err() == expected_response
 
 
 @pytest.mark.parametrize("invalid_rover_path, expected_response", invalid_rover_paths)
