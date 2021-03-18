@@ -27,8 +27,9 @@ def build_rover(rover_position_as_string: str, rover_id: int) -> Result[Rover, s
     return Ok(Rover(rover_id=rover_id, position_x=position_x, position_y=position_y, facing=direction))
 
 
-def build_rovers_and_instructions(rover_and_instruction_pairs: List[str]) -> Result[
-    tuple[list[Rover], dict[int, str]], str]:
+def build_rovers_and_instructions(
+    rover_and_instruction_pairs: List[str],
+) -> Result[tuple[list[Rover], dict[int, str]], str]:
     rover_list: List[Rover] = []
     instructions: Dict[int, str] = {}
     for count, input_line in enumerate(range(0, len(rover_and_instruction_pairs), 2)):
