@@ -1,5 +1,5 @@
 import re
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
 from result import Err, Ok, Result
 
@@ -27,7 +27,8 @@ def build_rover(rover_position_as_string: str, rover_id: int) -> Result[Rover, s
     return Ok(Rover(rover_id=rover_id, position_x=position_x, position_y=position_y, facing=direction))
 
 
-def build_rovers_and_instructions(rover_and_instruction_pairs: List[str]):
+def build_rovers_and_instructions(rover_and_instruction_pairs: List[str]) -> Result[
+    tuple[list[Rover], dict[int, str]], str]:
     rover_list: List[Rover] = []
     instructions: Dict[int, str] = {}
     for count, input_line in enumerate(range(0, len(rover_and_instruction_pairs), 2)):
@@ -40,6 +41,7 @@ def build_rovers_and_instructions(rover_and_instruction_pairs: List[str]):
         if not re.match(rover_movement_pattern, rover_movement_as_string):
             return Err(f"Movement data for rover {count + 1} is not in the correct format: {rover_movement_as_string}")
         instructions[count] = rover_movement_as_string
+    return Ok((rover_list, instructions))
 
 
 def read_input(rover_input: str) -> Result[InputResult, str]:
